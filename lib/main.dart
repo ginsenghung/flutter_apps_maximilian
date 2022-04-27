@@ -38,13 +38,13 @@ void main() async {
     await flutter_acrylic.Window.initialize();
     await WindowManager.instance.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
-      await windowManager.setTitleBarStyle(TitleBarStyle.normal,
-          windowButtonVisibility: true);
+      await windowManager.setTitleBarStyle(TitleBarStyle.hidden,
+          windowButtonVisibility: false);
       await windowManager.setSize(const Size(755, 545));
       await windowManager.setMinimumSize(const Size(755, 545));
       await windowManager.center();
       await windowManager.show();
-      await windowManager.setPreventClose(false);
+      await windowManager.setPreventClose(true);
       await windowManager.setSkipTaskbar(false);
     });
   }
@@ -101,15 +101,6 @@ class MyApp extends StatelessWidget {
             : MaterialApp(
                 title: 'Flutter Demo',
                 theme: ThemeData(
-                  // This is the theme of your application.
-                  //
-                  // Try running your application with "flutter run". You'll see the
-                  // application has a blue toolbar. Then, without quitting the app, try
-                  // changing the primarySwatch below to Colors.green and then invoke
-                  // "hot reload" (press "r" in the console where you ran "flutter run",
-                  // or simply save your changes to "hot reload" in a Flutter IDE).
-                  // Notice that the counter didn't reset back to zero; the application
-                  // is not restarted.
                   primarySwatch: Colors.blue,
                 ),
                 home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -122,15 +113,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -139,9 +121,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with WindowListener {
   int _counter = 0;
-
+  bool value = false;
+  int index = 0;
   final settingsController = ScrollController();
   final viewKey = GlobalKey();
+  final searchTextController = TextEditingController();
 
   @override
   void initState() {
@@ -158,11 +142,6 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
@@ -170,54 +149,155 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return isDesktop
+        ? fluent_ui.NavigationView(
+            key: viewKey,
+            appBar: fluent_ui.NavigationAppBar(
+              title: () {
+                if (kIsWeb) return const Text(appTitle);
+                return const DragToMoveArea(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(appTitle),
+                  ),
+                );
+              }(),
+              actions: kIsWeb
+                  ? null
+                  : DragToMoveArea(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [Spacer(), WindowButtons()],
+                      ),
+                    ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            pane: fluent_ui.NavigationPane(
+              selected: index,
+              onChanged: (i) => setState(() => index = i),
+              size: const fluent_ui.NavigationPaneSize(
+                openMinWidth: 250,
+                openMaxWidth: 320,
+              ),
+              header: Container(
+                height: fluent_ui.kOneLineTileHeight,
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: const FlutterLogo(
+                  style: FlutterLogoStyle.horizontal,
+                  size: 100,
+                ),
+              ),
+              displayMode: appTheme.displayMode,
+              indicator: () {
+                switch (appTheme.indicator) {
+                  case NavigationIndicators.end:
+                    return const fluent_ui.EndNavigationIndicator();
+                  case NavigationIndicators.sticky:
+                  default:
+                    return const fluent_ui.StickyNavigationIndicator();
+                }
+              }(),
+              autoSuggestBox: fluent_ui.AutoSuggestBox(
+                controller: searchTextController,
+                items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
+                leadingIcon: Container(
+                  child: const fluent_ui.Icon(fluent_ui.FluentIcons.search),
+                  margin: const EdgeInsets.only(left: 8),
+                ),
+              ),
+              autoSuggestBoxReplacement:
+                  const Icon(fluent_ui.FluentIcons.search),
+              footerItems: [
+                fluent_ui.PaneItemSeparator(),
+                fluent_ui.PaneItem(
+                  icon: const Icon(fluent_ui.FluentIcons.settings),
+                  title: const Text('Ajustes'),
+                ),
+                _LinkPaneItemAction(
+                  icon: const Icon(fluent_ui.FluentIcons.open_source),
+                  title: const Text('Source code'),
+                  link:
+                      'https://github.com/ginsenghung/flutter_apps_maximilian',
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+            content: fluent_ui.NavigationBody(
+              index: index,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Tocaste el botón: ',
+                    ),
+                    Text(
+                      '$_counter',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    fluent_ui.FilledButton(
+                      child: const Icon(fluent_ui.FluentIcons.add),
+                      onPressed: _incrementCounter,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'You have pushed the button this many times:',
+                  ),
+                  Text(
+                    '$_counter',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: _incrementCounter,
+              tooltip: 'Increment',
+              child: const Icon(Icons.add),
+            ), // This trailing comma makes auto-formatting nicer for build methods.
+          );
+  }
+
+  @override
+  void onWindowClose() async {
+    bool _isPreventClose = await windowManager.isPreventClose();
+    if (_isPreventClose) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return fluent_ui.ContentDialog(
+            title: const Text('¿Desea cerrar?'),
+            content: const Text('¿Está seguro que desea cerrar esta ventana?'),
+            actions: [
+              fluent_ui.FilledButton(
+                child: const Text('Sí'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  windowManager.destroy();
+                },
+              ),
+              fluent_ui.Button(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
 
