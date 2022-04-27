@@ -11,6 +11,7 @@ import 'package:url_strategy/url_strategy.dart';
 import 'package:window_manager/window_manager.dart';
 
 import './theme.dart';
+import './settings.dart';
 
 const String appTitle = 'Flutter Demo';
 
@@ -196,6 +197,12 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                     return const fluent_ui.StickyNavigationIndicator();
                 }
               }(),
+              items: [
+                fluent_ui.PaneItem(
+                  icon: const Icon(fluent_ui.FluentIcons.checkbox_composite),
+                  title: const Text('App'),
+                ),
+              ],
               autoSuggestBox: fluent_ui.AutoSuggestBox(
                 controller: searchTextController,
                 items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
@@ -239,6 +246,9 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
                       onPressed: _incrementCounter,
                     ),
                   ],
+                ),
+                Settings(
+                  controller: settingsController,
                 ),
               ],
             ),
