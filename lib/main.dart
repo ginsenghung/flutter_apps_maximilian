@@ -38,13 +38,18 @@ void main() async {
 // void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  void answerQuestion() {
+    print('Respondiste');
+  }
+
   @override
   Widget build(BuildContext context) {
     int index = 0;
 
-    void answerQuestion() {
-      print('Respondiste');
-    }
+    var questions = [
+      'Cual es tu color favorito?',
+      'Cual es tu animal favorito?',
+    ];
 
     return Platform.isWindows
         ? fluent_ui.FluentApp(
@@ -65,11 +70,13 @@ class MyApp extends StatelessWidget {
                       ),
                       ElevatedButton(
                         child: const Text('Respuesta 2'),
-                        onPressed: answerQuestion,
+                        onPressed: () => print('Respondiste la 2'),
                       ),
                       ElevatedButton(
                         child: const Text('Respuesta 3'),
-                        onPressed: answerQuestion,
+                        onPressed: () {
+                          print('Respondiste la 3');
+                        },
                       ),
                     ],
                   )
@@ -89,11 +96,13 @@ class MyApp extends StatelessWidget {
                   ),
                   ElevatedButton(
                     child: const Text('Respuesta 2'),
-                    onPressed: answerQuestion,
+                    onPressed: () => print('Respondiste la 2'),
                   ),
                   ElevatedButton(
                     child: const Text('Respuesta 3'),
-                    onPressed: answerQuestion,
+                    onPressed: () {
+                      print('Respondiste la 3');
+                    },
                   ),
                 ],
               ),
