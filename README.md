@@ -1,6 +1,7 @@
 # flutter_apps_maximilian
 
-Ejercicios del curso de Flutter Android and iOS Apps de Maximilian Schwarzmuller actualizado a Flutter SDK 2.x e intento de soporte para aplicaciones Windows.
+Ejercicios del curso de Flutter & Dart - The Complete Guide de Maximilian Schwarzmuller actualizado a Flutter SDK 2.x e intento de soporte para aplicaciones Windows.
+Enlace del curso: https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps/
 
 ## Getting Started
 
