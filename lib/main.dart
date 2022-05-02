@@ -38,14 +38,16 @@ void main() async {
 // void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  int index = 0;
+  var questionIndex = 0;
+
   void answerQuestion() {
-    print('Respondiste');
+    questionIndex = questionIndex + 1;
+    print(questionIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    int index = 0;
-
     var questions = [
       'Cual es tu color favorito?',
       'Cual es tu animal favorito?',
@@ -63,20 +65,18 @@ class MyApp extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      const Text('La pregunta'),
+                      Text(questions[questionIndex]),
                       ElevatedButton(
                         child: const Text('Respuesta 1'),
                         onPressed: answerQuestion,
                       ),
                       ElevatedButton(
                         child: const Text('Respuesta 2'),
-                        onPressed: () => print('Respondiste la 2'),
+                        onPressed: answerQuestion,
                       ),
                       ElevatedButton(
                         child: const Text('Respuesta 3'),
-                        onPressed: () {
-                          print('Respondiste la 3');
-                        },
+                        onPressed: answerQuestion,
                       ),
                     ],
                   )
@@ -96,13 +96,11 @@ class MyApp extends StatelessWidget {
                   ),
                   ElevatedButton(
                     child: const Text('Respuesta 2'),
-                    onPressed: () => print('Respondiste la 2'),
+                    onPressed: answerQuestion,
                   ),
                   ElevatedButton(
                     child: const Text('Respuesta 3'),
-                    onPressed: () {
-                      print('Respondiste la 3');
-                    },
+                    onPressed: answerQuestion,
                   ),
                 ],
               ),
