@@ -22,13 +22,13 @@ void main() async {
     await flutter_acrylic.Window.initialize();
     await WindowManager.instance.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
-      await windowManager.setTitleBarStyle(TitleBarStyle.hidden,
+      await windowManager.setTitleBarStyle(TitleBarStyle.normal,
           windowButtonVisibility: false);
       await windowManager.setSize(const Size(755, 545));
       await windowManager.setMinimumSize(const Size(755, 545));
       await windowManager.center();
       await windowManager.show();
-      await windowManager.setPreventClose(true);
+      await windowManager.setPreventClose(false);
       await windowManager.setSkipTaskbar(false);
     });
   }
@@ -40,15 +40,59 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    int index = 0;
+
     return Platform.isWindows
         ? fluent_ui.FluentApp(
             title: 'Flutter App',
-            home: Text('Ejemplo de App con Flutter'),
+            home: fluent_ui.NavigationView(
+              appBar: const fluent_ui.NavigationAppBar(
+                title: Text('Flutter App'),
+              ),
+              content: fluent_ui.NavigationBody(
+                index: index,
+                children: [
+                  Column(
+                    children: const [
+                      Text('La pregunta'),
+                      ElevatedButton(
+                        child: Text('Respuesta 1'),
+                        onPressed: null,
+                      ),
+                      ElevatedButton(
+                        child: Text('Respuesta 2'),
+                        onPressed: null,
+                      ),
+                      ElevatedButton(
+                        child: Text('Respuesta 3'),
+                        onPressed: null,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
           )
         : MaterialApp(
             home: Scaffold(
-              appBar: AppBar(title: Text('Flutter App')),
-              body: Text('Ejemplo de App con Flutter'),
+              appBar: AppBar(title: const Text('Flutter App')),
+              body: Column(
+                children: const [
+                  Text('La pregunta'),
+                  ElevatedButton(
+                    child: Text('Respuesta 1'),
+                    onPressed: null,
+                  ),
+                  ElevatedButton(
+                    child: Text('Respuesta 2'),
+                    onPressed: null,
+                  ),
+                  ElevatedButton(
+                    child: Text('Respuesta 3'),
+                    onPressed: null,
+                  ),
+                ],
+              ),
             ),
           );
   }
