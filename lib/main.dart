@@ -40,19 +40,19 @@ void main() async {
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return MyAppState();
+    return _MyAppState();
   }
 }
 
-class MyAppState extends State<MyApp> {
-  int index = 0;
-  var questionIndex = 0;
+class _MyAppState extends State<MyApp> {
+  int _index = 0;
+  var _questionIndex = 0;
 
-  void answerQuestion() {
+  void _answerQuestion() {
     setState(() {
-      questionIndex = questionIndex + 1;
+      _questionIndex = _questionIndex + 1;
     });
-    print(questionIndex);
+    print(_questionIndex);
   }
 
   @override
@@ -70,22 +70,22 @@ class MyAppState extends State<MyApp> {
                 title: Text('Flutter App'),
               ),
               content: fluent_ui.NavigationBody(
-                index: index,
+                index: _index,
                 children: [
                   Column(
                     children: [
-                      Text(questions[questionIndex]),
+                      Text(questions[_questionIndex]),
                       ElevatedButton(
                         child: const Text('Respuesta 1'),
-                        onPressed: answerQuestion,
+                        onPressed: _answerQuestion,
                       ),
                       ElevatedButton(
                         child: const Text('Respuesta 2'),
-                        onPressed: answerQuestion,
+                        onPressed: _answerQuestion,
                       ),
                       ElevatedButton(
                         child: const Text('Respuesta 3'),
-                        onPressed: answerQuestion,
+                        onPressed: _answerQuestion,
                       ),
                     ],
                   )
@@ -101,15 +101,15 @@ class MyAppState extends State<MyApp> {
                   const Text('La pregunta'),
                   ElevatedButton(
                     child: const Text('Respuesta 1'),
-                    onPressed: answerQuestion,
+                    onPressed: _answerQuestion,
                   ),
                   ElevatedButton(
                     child: const Text('Respuesta 2'),
-                    onPressed: answerQuestion,
+                    onPressed: _answerQuestion,
                   ),
                   ElevatedButton(
                     child: const Text('Respuesta 3'),
-                    onPressed: answerQuestion,
+                    onPressed: _answerQuestion,
                   ),
                 ],
               ),
