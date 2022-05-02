@@ -42,6 +42,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     int index = 0;
 
+    void answerQuestion() {
+      print('Respondiste');
+    }
+
     return Platform.isWindows
         ? fluent_ui.FluentApp(
             title: 'Flutter App',
@@ -53,19 +57,19 @@ class MyApp extends StatelessWidget {
                 index: index,
                 children: [
                   Column(
-                    children: const [
-                      Text('La pregunta'),
+                    children: [
+                      const Text('La pregunta'),
                       ElevatedButton(
-                        child: Text('Respuesta 1'),
-                        onPressed: null,
+                        child: const Text('Respuesta 1'),
+                        onPressed: answerQuestion,
                       ),
                       ElevatedButton(
-                        child: Text('Respuesta 2'),
-                        onPressed: null,
+                        child: const Text('Respuesta 2'),
+                        onPressed: answerQuestion,
                       ),
                       ElevatedButton(
-                        child: Text('Respuesta 3'),
-                        onPressed: null,
+                        child: const Text('Respuesta 3'),
+                        onPressed: answerQuestion,
                       ),
                     ],
                   )
@@ -77,19 +81,19 @@ class MyApp extends StatelessWidget {
             home: Scaffold(
               appBar: AppBar(title: const Text('Flutter App')),
               body: Column(
-                children: const [
-                  Text('La pregunta'),
+                children: [
+                  const Text('La pregunta'),
                   ElevatedButton(
-                    child: Text('Respuesta 1'),
-                    onPressed: null,
+                    child: const Text('Respuesta 1'),
+                    onPressed: answerQuestion,
                   ),
                   ElevatedButton(
-                    child: Text('Respuesta 2'),
-                    onPressed: null,
+                    child: const Text('Respuesta 2'),
+                    onPressed: answerQuestion,
                   ),
                   ElevatedButton(
-                    child: Text('Respuesta 3'),
-                    onPressed: null,
+                    child: const Text('Respuesta 3'),
+                    onPressed: answerQuestion,
                   ),
                 ],
               ),
