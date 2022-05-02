@@ -6,6 +6,8 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:window_manager/window_manager.dart';
 
+import './question.dart';
+
 bool get isDesktop {
   if (kIsWeb) return false;
   return [
@@ -74,7 +76,9 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   Column(
                     children: [
-                      Text(questions[_questionIndex]),
+                      Question(
+                        questions[_questionIndex],
+                      ),
                       ElevatedButton(
                         child: const Text('Respuesta 1'),
                         onPressed: _answerQuestion,
@@ -98,7 +102,9 @@ class _MyAppState extends State<MyApp> {
               appBar: AppBar(title: const Text('Flutter App')),
               body: Column(
                 children: [
-                  const Text('La pregunta'),
+                  Question(
+                    questions[_questionIndex],
+                  ),
                   ElevatedButton(
                     child: const Text('Respuesta 1'),
                     onPressed: _answerQuestion,
